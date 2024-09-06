@@ -5,30 +5,19 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.3</version>
+        <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.devskillslearning</groupId>
+
+    <groupId>guru.springframework</groupId>
     <artifactId>spring-ai-intro</artifactId>
+
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-ai-intro</name>
     <description>spring-ai-intro</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
     <properties>
         <java.version>21</java.version>
-        <spring-ai.version>1.0.0-M2</spring-ai.version>
+        <spring-ai.version>0.8.1</spring-ai.version>
     </properties>
     <dependencies>
         <dependency>
