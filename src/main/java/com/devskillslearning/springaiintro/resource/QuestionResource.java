@@ -1,6 +1,7 @@
 package com.devskillslearning.springaiintro.resource;
 
 import com.devskillslearning.springaiintro.model.Answer;
+import com.devskillslearning.springaiintro.model.GetCapitalRequest;
 import com.devskillslearning.springaiintro.model.Question;
 import com.devskillslearning.springaiintro.services.OpenAIService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,16 @@ public class QuestionResource {
 
     public QuestionResource(OpenAIService openAIService) {
         this.openAIService = openAIService;
+    }
+
+    @PostMapping("/capitalWithInfo")
+    public Answer getCapitalWithInfo(@RequestBody GetCapitalRequest getCapitalRequest) {
+        return openAIService.getCapitalWithInfo(getCapitalRequest);
+    }
+
+    @PostMapping("/capital")
+    public Answer getCapital(@RequestBody GetCapitalRequest getCapitalRequest) {
+        return openAIService.getCapital(getCapitalRequest);
     }
 
     @PostMapping("/ask")
