@@ -2,14 +2,14 @@ package com.devskillslearning.springaiintro.services;
 
 import com.devskillslearning.springaiintro.model.Answer;
 import com.devskillslearning.springaiintro.model.GetCapitalRequest;
+import com.devskillslearning.springaiintro.model.GetCapitalResponse;
 import com.devskillslearning.springaiintro.model.Question;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.ai.chat.ChatClient;
-import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -20,10 +20,10 @@ import java.util.Map;
 @Service
 public class OpenAIServiceImpl implements OpenAIService {
 
-    private final ChatClient chatClient;
+    private final ChatModel chatModel;
 
-    public OpenAIServiceImpl(ChatClient chatClient) {
-        this.chatClient = chatClient;
+    public OpenAIServiceImpl(ChatModel chatModel) {
+        this.chatModel = chatModel;
     }
 
     @Value("classpath:templates/get-capital-prompt.st")
@@ -39,35 +39,29 @@ public class OpenAIServiceImpl implements OpenAIService {
     public Answer getCapitalWithInfo(GetCapitalRequest getCapitalRequest) {
         final PromptTemplate promptTemplate = new PromptTemplate(getCapitalPromptWithInfo);
         final Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
-        final ChatResponse response = chatClient.call(prompt);
+        final ChatResponse response = chatModel.call(prompt);
 
         return new Answer(response.getResult().getOutput().getContent());
     }
 
 
     @Override
-    public Answer getCapital(GetCapitalRequest getCapitalRequest) {
+    public GetCapitalResponse getCapital(GetCapitalRequest getCapitalRequest) {
+        BeanOutputConverter<GetCapitalResponse> converter = new BeanOutputConverter<>(GetCapitalResponse.class);
+        String format = converter.getFormat();
+
         final PromptTemplate promptTemplate = new PromptTemplate(getCapitalPrompt);
-        final Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry()));
-        final ChatResponse response = chatClient.call(prompt);
-
-        String responseString;
-        try {
-            JsonNode jsonNode = objectMapper.readTree(response.getResult().getOutput().getContent());
-            responseString = jsonNode.get("answer").asText();
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
-        return new Answer(responseString);
+        final Prompt prompt = promptTemplate.create(Map.of("stateOrCountry", getCapitalRequest.stateOrCountry(),
+                "format", format));
+        final ChatResponse response = chatModel.call(prompt);
+        return converter.convert(response.getResult().getOutput().getContent());
     }
 
     @Override
     public Answer getAnswer(Question question) {
         final PromptTemplate promptTemplate = new PromptTemplate(question.question());
         final Prompt prompt = promptTemplate.create();
-        final ChatResponse response = chatClient.call(prompt);
+        final ChatResponse response = chatModel.call(prompt);
 
         return new Answer(response.getResult().getOutput().getContent());
     }
@@ -76,7 +70,7 @@ public class OpenAIServiceImpl implements OpenAIService {
     public String getAnswer(String question) {
         final PromptTemplate promptTemplate = new PromptTemplate(question);
         final Prompt prompt = promptTemplate.create();
-        final ChatResponse response = chatClient.call(prompt);
+        final ChatResponse response = chatModel.call(prompt);
 
         return response.getResult().getOutput().getContent();
     }

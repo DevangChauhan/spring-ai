@@ -8,12 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 class OpenAIServiceImplTest {
 
     @Autowired
-    private OpenAIService openAIService;
+    OpenAIService openAIService;
 
     @Test
     void getAnswer() {
-        final String question = "What is the capital of India?";
-        final String answer = openAIService.getAnswer(question);
+
+        String answer = openAIService.getAnswer("Create JSON for the following: There are 3 people, two males. " +
+                "One is named Mark. Another is named Joe. And a third person is a woman named Sam. The woman is age 20 " +
+                "and the two men are both 19.");
         System.out.println("Got the answer");
         System.out.println(answer);
     }
