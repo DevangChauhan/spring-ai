@@ -3,7 +3,7 @@ package com.devskillslearning.openai;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.devskillslearning")
 public class OpenaiApplication {
 
     public static void main(String[] args) {
