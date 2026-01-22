@@ -1,6 +1,7 @@
 package com.devskillslearning.openai.controller;
 
 
+import com.devskillslearning.openai.advisors.TokenUsageAuditAdvisor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,6 +39,7 @@ public class ChatController {
             @RequestParam("message") String message) {
         return chatClient
                 .prompt()
+                //.advisors(new TokenUsageAuditAdvisor())
                 .system(
                         """
                                 You are an internal IT helpdesk assistant. Your role is to assist
