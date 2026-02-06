@@ -26,9 +26,34 @@ public class RagController {
     @Value("classpath:/promptTemplates/systemPromptRandomDataTemplate.st")
     Resource promptTemplate;
 
+    @Value("classpath:/promptTemplates/systemPromptTemplate.st")
+    Resource hrSystemTemplate;
+
     public RagController(@Qualifier("chatMemoryChatClient") ChatClient chatClient, VectorStore vectorStore) {
         this.chatClient = chatClient;
         this.vectorStore = vectorStore;
+    }
+
+    @GetMapping("/document/chat")
+    public ResponseEntity<String> documentChat(@RequestHeader("username") String username,
+                                             @RequestParam("message") String message) {
+        final SearchRequest searchRequest = SearchRequest.builder().query(message).topK(3)
+                .similarityThreshold(0.5)
+                .build();
+
+        final List<Document> similarDocs = vectorStore.similaritySearch(searchRequest);
+        final String similarContext = similarDocs.stream()
+                .map(Document::getText)
+                .collect(Collectors.joining(System.lineSeparator()));
+
+        final String answer = chatClient.prompt().system(promptSystemSpec -> promptSystemSpec.text(hrSystemTemplate)
+                        .param("documents", similarContext))
+                .advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID, username))
+                .user(message)
+                .call()
+                .content();
+
+        return ResponseEntity.ok(answer);
     }
 
     @GetMapping("/random/chat")
