@@ -1,4 +1,4 @@
-package com.devskillslearning.openai.rag;
+package com.devskillslearning.springai.rag;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.document.Document;

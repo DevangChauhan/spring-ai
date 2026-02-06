@@ -1,7 +1,6 @@
-package com.devskillslearning.openai.controller;
+package com.devskillslearning.springai.controller;
 
 
-import com.devskillslearning.openai.advisors.TokenUsageAuditAdvisor;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

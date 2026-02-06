@@ -1,4 +1,4 @@
-package com.devskillslearning.openai.advisors;
+package com.devskillslearning.springai.advisors;
 
 
 import org.springframework.ai.chat.client.ChatClientRequest;

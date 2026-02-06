@@ -1,7 +1,7 @@
-package com.devskillslearning.openai.config;
+package com.devskillslearning.springai.config;
 
 
-import com.devskillslearning.openai.advisors.TokenUsageAuditAdvisor;
+import com.devskillslearning.springai.advisors.TokenUsageAuditAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;

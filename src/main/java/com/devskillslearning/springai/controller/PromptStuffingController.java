@@ -1,4 +1,4 @@
-package com.devskillslearning.openai.controller;
+package com.devskillslearning.springai.controller;
 
 
 import org.springframework.ai.chat.client.ChatClient;
